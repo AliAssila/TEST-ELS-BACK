@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -49,17 +50,19 @@ public class SalariedRessourceTest {
 
     @Before
     public void setup() {
+        MockitoAnnotations.initMocks(salariedRessource);
         this.restSalariedMockMvc = MockMvcBuilders.standaloneSetup(salariedRessource).build();
     }
 
     @Test
     public void testCreateSalaried() throws Exception {
-        // create entity
+        /* create entity */
         List<Salaried> salariedList = SalariedServiceImpTest.createEntitys();
-        //when
+        /* when */
         when(salariedServiceMock.createManySalaried(salariedList)).thenReturn(salariedList);
-        //then
+        /* then */
         restSalariedMockMvc.perform(post("/api/salaried")
+                .contentType("application/json;charset=UTF-8")
                 .content(asJsonString(salariedList)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
@@ -72,11 +75,11 @@ public class SalariedRessourceTest {
     }
     @Test
     public void testGetAllSalriedNoduplicate() throws Exception {
-        // create entity
+        /* create entity */
         List<Salaried> salariedList = SalariedServiceImpTest.createEntitys();
-        //when
+        /* when */
         when(salariedServiceMock.getAllSalariedsNoDuplicateByCreteria("fullname")).thenReturn(salariedList.subList(1,2));
-        //then
+        /* then */
         restSalariedMockMvc.perform(get("/api/salaried/fullname"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
