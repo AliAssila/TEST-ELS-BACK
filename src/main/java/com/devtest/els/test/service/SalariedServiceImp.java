@@ -37,8 +37,7 @@ public class SalariedServiceImp implements SalariedService{
         List<Salaried> salariedListToSave = new LinkedList<>();
         salariedList.forEach( salaried -> {
             if (!(salariedRepository.getSalariedById(salaried.getId()).isPresent())){
-                salariedRepository.save(salaried);
-                salariedListToSave.add(salaried);
+                salariedListToSave.add(salariedRepository.save(salaried));
             }
         });
         return salariedListToSave;

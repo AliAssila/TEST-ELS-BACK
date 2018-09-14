@@ -7,11 +7,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
@@ -36,13 +39,41 @@ public class SalariedServiceImpTest {
     }
 
     @Test
-    public void testCreateManySalaried() {
-        // create entity
-        List<Salaried> salariedList = createEntitys();
-        // when
-        when(salariedRepository.save(salariedList)).thenReturn(salariedList);
+    public void testCreateManySalariedNewSalaried() {
+        /* create entity */
+        Salaried salaried = new Salaried();
+        salaried.setId("1");
+        salaried.setFullname("john");
+        salaried.setAddress("paris");
+        salaried.setCategory("webDev");
+        salaried.setDescription("web");
+        List<Salaried> salariedList = new LinkedList<>();
+        salariedList.add(salaried);
+        /* when */
+        when(salariedRepository.save(salaried)).thenReturn(salaried);
+        when(salariedRepository.getSalariedById(salaried.getId())).thenReturn(Optional.empty());
         List<Salaried> listSalariedRerieved = salariedServiceImp.createManySalaried(salariedList);
+        /* assert */
         assertEquals(salariedList,listSalariedRerieved);
+    }
+    @Test
+    public void testCreateManySalariedWithExistingSalaried() {
+        /* create entity */
+        Salaried salaried = new Salaried();
+        salaried.setId("1");
+        salaried.setFullname("john");
+        salaried.setAddress("paris");
+        salaried.setCategory("webDev");
+        salaried.setDescription("web");
+        List<Salaried> salariedList = new LinkedList<>();
+        salariedList.add(salaried);
+        /*  when */
+        when(salariedRepository.save(salaried)).thenReturn(salaried);
+        when(salariedRepository.getSalariedById(salaried.getId())).thenReturn(Optional.of(salaried));
+        List<Salaried> listSalariedRerieved = salariedServiceImp.createManySalaried(salariedList);
+
+        /* assert */
+        assertEquals(listSalariedRerieved.size(),0);
     }
     @Test
     public void testGetAllSalariedsNoDuplicateByCreteria() {
