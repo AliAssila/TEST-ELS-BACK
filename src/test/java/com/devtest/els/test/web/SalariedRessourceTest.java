@@ -74,7 +74,7 @@ public class SalariedRessourceTest {
         verifyNoMoreInteractions(salariedServiceMock);
     }
     @Test
-    public void testGetAllSalriedNoduplicate() throws Exception {
+    public void testGetAllSalriedNoDuplicate() throws Exception {
         /* create entity */
         List<Salaried> salariedList = SalariedServiceImpTest.createEntitys();
         /* when */

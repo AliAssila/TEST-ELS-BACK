@@ -21,8 +21,4 @@ public class Utils {
             default: return  "";
         }
     }
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        final Set<Object> seen = new HashSet<>();
-        return t -> seen.add(keyExtractor.apply(t));
-    }
 }

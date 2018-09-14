@@ -3,6 +3,8 @@ package com.devtest.els.test.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.Objects;
 /**
  * A Salaried.
@@ -69,13 +71,17 @@ public class Salaried {
         if (this == o) return true;
         if (!(o instanceof Salaried)) return false;
         Salaried salaried = (Salaried) o;
-        return Objects.equals(getId(), salaried.getId());
+        return new EqualsBuilder().append(id, salaried.id)
+                .append(fullname, salaried.fullname)
+                .append(category, salaried.category)
+                .append(address, salaried.address)
+                .append(description, salaried.description).isEquals();
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(getId());
+        return new HashCodeBuilder(16, 32).append(id).append(fullname).append(category)
+                .append(address).append(description).toHashCode();
     }
 
     @Override

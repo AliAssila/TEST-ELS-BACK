@@ -54,22 +54,22 @@ public class SalariedServiceImpTest {
         List<Salaried> listSalariedRerievedByFullName = salariedServiceImp.getAllSalariedsNoDuplicateByCreteria("fullname");
 
         assertTrue(listSalariedRerievedByFullName
-                .stream().collect(Collectors.groupingBy(Salaried::getFullname)).size() <= 1);
+                .stream().collect(Collectors.groupingBy(Salaried::getFullname)).size() <= 2);
 
         List<Salaried> listSalariedRerievedByCategory = salariedServiceImp.getAllSalariedsNoDuplicateByCreteria("category");
 
         assertTrue(listSalariedRerievedByCategory
-                .stream().collect(Collectors.groupingBy(Salaried::getCategory)).size() <= 1);
+                .stream().collect(Collectors.groupingBy(Salaried::getCategory)).size() <= 2);
 
         List<Salaried> listSalariedRerievedByAddress = salariedServiceImp.getAllSalariedsNoDuplicateByCreteria("address");
 
         assertTrue(listSalariedRerievedByAddress
-                .stream().collect(Collectors.groupingBy(Salaried::getAddress)).size() <= 1);
+                .stream().collect(Collectors.groupingBy(Salaried::getAddress)).size() <= 2);
 
         List<Salaried> listSalariedRerievedByDescription = salariedServiceImp.getAllSalariedsNoDuplicateByCreteria("description");
 
         assertTrue(listSalariedRerievedByAddress
-                .stream().collect(Collectors.groupingBy(Salaried::getDescription)).size() <= 1);
+                .stream().collect(Collectors.groupingBy(Salaried::getDescription)).size() <= 2);
 
     }
     /**
@@ -87,6 +87,7 @@ public class SalariedServiceImpTest {
         Salaried salaried2 = new Salaried();
         salaried2.setId("2");
         salaried2.setFullname("smith");
+        salaried2.setAddress("paris2");
         salaried2.setCategory("scrum master");
         salaried2.setCategory("management");
         Salaried salaried3 = new Salaried();

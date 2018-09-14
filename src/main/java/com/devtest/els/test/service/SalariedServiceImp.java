@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,14 @@ public class SalariedServiceImp implements SalariedService{
     @Override
     public List<Salaried> createManySalaried(List<Salaried> salariedList){
         log.debug("Creation list of salaried {}", salariedList);
-        return salariedRepository.save(salariedList);
+        List<Salaried> salariedListToSave = new LinkedList<>();
+        salariedList.forEach( salaried -> {
+            if (!(salariedRepository.getSalariedById(salaried.getId()).isPresent())){
+                salariedRepository.save(salaried);
+                salariedListToSave.add(salaried);
+            }
+        });
+        return salariedListToSave;
     }
     /**
      * getAllSalariedsNoDuplicateByCreteria : retrieve list fo salaried not duplicated.
@@ -44,10 +52,9 @@ public class SalariedServiceImp implements SalariedService{
     public List<Salaried> getAllSalariedsNoDuplicateByCreteria(String creteria){
         log.debug("retrieve list of salaried not duplicated by {}", creteria);
         List<Salaried> salariedList = salariedRepository.findAll();
-        return  salariedList.stream()
-                .filter(Utils.distinctByKey(p ->
-                        Utils.creteriaMethode(p,creteria.toLowerCase())))
-                .collect(Collectors.toList());
+        return io.vavr.collection.List.ofAll(salariedList)
+                .distinctBy(salaried -> Utils.creteriaMethode(salaried,creteria.toLowerCase()))
+                .toJavaList();
 
     }
 
