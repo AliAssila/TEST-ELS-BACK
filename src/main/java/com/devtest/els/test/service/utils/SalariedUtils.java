@@ -8,6 +8,8 @@ import com.devtest.els.test.domain.Salaried;
 public final class SalariedUtils {
 
     private SalariedUtils(){
+        // no instances
+        // class is final and the constructor is private
     }
     /**
      * getValueByCreteria

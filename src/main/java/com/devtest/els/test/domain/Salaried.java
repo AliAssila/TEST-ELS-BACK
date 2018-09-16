@@ -23,6 +23,7 @@ public class Salaried {
     private String description;
 
     public Salaried() {
+        // Constructors
     }
 
     public String getId() {
