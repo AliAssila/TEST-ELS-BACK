@@ -29,6 +29,16 @@ public class SalariedRessource {
     }
 
     /**
+     * GET  /salaried : get all salarieds.
+     * @return the ResponseEntity with status 200 (OK) and with body all salaried no duplicate
+     */
+    @GetMapping("/salaried")
+    public  ResponseEntity<List<Salaried>> getAllSalrieds(){
+        final List<Salaried> salariedList = salariedServiceImp.getAllSalarieds();
+        log.debug("REST request to get list of all salaried : {}", salariedList);
+        return new ResponseEntity<>(salariedList, HttpStatus.OK);
+    }
+    /**
      * GET  /salaried : get all salarieds no duplicate.
      * @param creteria creteria of filter
      * @return the ResponseEntity with status 200 (OK) and with body all salaried no duplicate

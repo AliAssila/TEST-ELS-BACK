@@ -8,6 +8,7 @@ import java.util.List;
  */
 public interface SalariedService {
 
+    List<Salaried> getAllSalarieds();
     List<Salaried> createManySalaried(List<Salaried> salariedList);
     List<Salaried> getAllSalariedsNoDuplicateByCreteria(String creteria);
 }

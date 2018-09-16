@@ -2,15 +2,13 @@ package com.devtest.els.test.service;
 
 import com.devtest.els.test.domain.Salaried;
 import com.devtest.els.test.repository.SalariedRepository;
-import com.devtest.els.test.service.utils.Utils;
+import com.devtest.els.test.service.utils.SalariedUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service class for managing salaried.
@@ -34,14 +32,19 @@ public class SalariedServiceImp implements SalariedService{
     @Override
     public List<Salaried> createManySalaried(List<Salaried> salariedList){
         log.debug("Creation list of salaried {}", salariedList);
-        List<Salaried> salariedListToSave = new LinkedList<>();
-        salariedList.forEach( salaried -> {
-            if (!(salariedRepository.getSalariedById(salaried.getId()).isPresent())){
-                salariedListToSave.add(salariedRepository.save(salaried));
-            }
-        });
-        return salariedListToSave;
+        return salariedRepository.saveAll(salariedList);
     }
+    /**
+     * getAllSalarieds : retrieve list of all salarieds.
+     * @return the list of All salaried
+     */
+    @Override
+    public List<Salaried> getAllSalarieds(){
+        List<Salaried> salariedList = salariedRepository.findAll();
+        log.debug("retrieve list of all salaried {}", salariedList);
+        return salariedList;
+    }
+
     /**
      * getAllSalariedsNoDuplicateByCreteria : retrieve list fo salaried not duplicated.
      * @param creteria (String) : key filter
@@ -52,9 +55,8 @@ public class SalariedServiceImp implements SalariedService{
         log.debug("retrieve list of salaried not duplicated by {}", creteria);
         List<Salaried> salariedList = salariedRepository.findAll();
         return io.vavr.collection.List.ofAll(salariedList)
-                .distinctBy(salaried -> Utils.creteriaMethode(salaried,creteria.toLowerCase()))
+                .distinctBy(salaried -> SalariedUtils.getValueByCreteria(salaried,creteria.toLowerCase()))
                 .toJavaList();
-
     }
 
 }

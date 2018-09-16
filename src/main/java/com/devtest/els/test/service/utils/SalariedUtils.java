@@ -2,13 +2,20 @@ package com.devtest.els.test.service.utils;
 
 import com.devtest.els.test.domain.Salaried;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
+/**
+ * Utility class for salaried Management.
+ */
+public final class SalariedUtils {
 
-public class Utils {
-
-    public static String creteriaMethode(Salaried salaried, String creteria){
+    private SalariedUtils(){
+    }
+    /**
+     * getValueByCreteria
+     * @param salaried (Salried)
+     * @param creteria (String) : key filter
+     * @return value of property creteria
+     */
+    public static String getValueByCreteria(Salaried salaried, String creteria){
         switch (creteria){
             case "fullname":
                 return salaried.getFullname();

@@ -7,14 +7,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
@@ -23,7 +21,7 @@ import static org.junit.Assert.*;
 /**
  * Test class for the SalariedService service.
  *
- * @see SalariedServiceImpTest
+ * @see SalariedServiceImp
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SalariedServiceImpTest {
@@ -39,69 +37,36 @@ public class SalariedServiceImpTest {
     }
 
     @Test
-    public void testCreateManySalariedNewSalaried() {
+    public void testGetAllSalarieds() {
         /* create entity */
-        Salaried salaried = new Salaried();
-        salaried.setId("1");
-        salaried.setFullname("john");
-        salaried.setAddress("paris");
-        salaried.setCategory("webDev");
-        salaried.setDescription("web");
-        List<Salaried> salariedList = new LinkedList<>();
-        salariedList.add(salaried);
+        List<Salaried> salariedList = createEntitys();
         /* when */
-        when(salariedRepository.save(salaried)).thenReturn(salaried);
-        when(salariedRepository.getSalariedById(salaried.getId())).thenReturn(Optional.empty());
-        List<Salaried> listSalariedRerieved = salariedServiceImp.createManySalaried(salariedList);
+        when(salariedRepository.findAll()).thenReturn(salariedList);
+        List<Salaried> listSalariedRerieved = salariedServiceImp.getAllSalarieds();
         /* assert */
         assertEquals(salariedList,listSalariedRerieved);
     }
     @Test
-    public void testCreateManySalariedWithExistingSalaried() {
+    public void testCreateManySalaried() {
         /* create entity */
-        Salaried salaried = new Salaried();
-        salaried.setId("1");
-        salaried.setFullname("john");
-        salaried.setAddress("paris");
-        salaried.setCategory("webDev");
-        salaried.setDescription("web");
-        List<Salaried> salariedList = new LinkedList<>();
-        salariedList.add(salaried);
-        /*  when */
-        when(salariedRepository.save(salaried)).thenReturn(salaried);
-        when(salariedRepository.getSalariedById(salaried.getId())).thenReturn(Optional.of(salaried));
+        List<Salaried> salariedList = createEntitys();
+        /* when */
+        when(salariedRepository.saveAll(salariedList)).thenReturn(salariedList);
         List<Salaried> listSalariedRerieved = salariedServiceImp.createManySalaried(salariedList);
-
         /* assert */
-        assertEquals(listSalariedRerieved.size(),0);
+        assertEquals(salariedList,listSalariedRerieved);
     }
     @Test
     public void testGetAllSalariedsNoDuplicateByCreteria() {
         // create entity
         List<Salaried> salariedList = createEntitys();
         // when
-        when(salariedRepository.save(salariedList)).thenReturn(salariedList);
+        when(salariedRepository.findAll()).thenReturn(salariedList);
 
         List<Salaried> listSalariedRerievedByFullName = salariedServiceImp.getAllSalariedsNoDuplicateByCreteria("fullname");
 
         assertTrue(listSalariedRerievedByFullName
                 .stream().collect(Collectors.groupingBy(Salaried::getFullname)).size() <= 2);
-
-        List<Salaried> listSalariedRerievedByCategory = salariedServiceImp.getAllSalariedsNoDuplicateByCreteria("category");
-
-        assertTrue(listSalariedRerievedByCategory
-                .stream().collect(Collectors.groupingBy(Salaried::getCategory)).size() <= 2);
-
-        List<Salaried> listSalariedRerievedByAddress = salariedServiceImp.getAllSalariedsNoDuplicateByCreteria("address");
-
-        assertTrue(listSalariedRerievedByAddress
-                .stream().collect(Collectors.groupingBy(Salaried::getAddress)).size() <= 2);
-
-        List<Salaried> listSalariedRerievedByDescription = salariedServiceImp.getAllSalariedsNoDuplicateByCreteria("description");
-
-        assertTrue(listSalariedRerievedByAddress
-                .stream().collect(Collectors.groupingBy(Salaried::getDescription)).size() <= 2);
-
     }
     /**
      * Create a list of salaried.
@@ -127,7 +92,7 @@ public class SalariedServiceImpTest {
         salaried3.setAddress("paris");
         salaried3.setCategory("scrum master");
         salaried3.setCategory("management");
-        List<Salaried> salariedList = new LinkedList<>();
+        List<Salaried> salariedList = new ArrayList<Salaried>();
         salariedList.add(salaried1);
         salariedList.add(salaried2);
         salariedList.add(salaried3);
